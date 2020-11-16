@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+<link rel="stylesheet" href="/css/setting.css" />
+<link rel="stylesheet" href="/css/style.css" />
+<title>Show Page</title>
+</head>
+<body>
+    <header class="header">
+        <div class="header__bar row">
+            <h1 class="grid-6">
+                <a href="/">PicTweet</a>
+            </h1>
+            <div class="grid-6 user_nav">
+                <th:block th:if="${login_user != null}">
+                    <a class="post" href="/tweet/new">投稿する</a>
+                    <form th:action="@{/user/logout}" method="post">
+                        <input type="submit" value="ログアウト" />
+                    </form>
+                </th:block>
+                <th:block th:if="${login_user == null}">
+                    <a class="post" href="/user/login">ログイン</a>
+                    <a class="post" href="/user/registration">登録</a>
+                </th:block>
+            </div>
+        </div>
+    </header>
+    <div class="contents row" th:object="${tweet}">
+        <div class="content__post" th:style="'background-image: url(' + @{*{image}} + ');'">
+            <div class="more">
+                <span>■</span>
+                <ul class="more_list">
+                    <th:block th:if="${login_user != null} ? ${tweet.user.id.equals(login_user.id)}">
+                        <li>
+                            <a th:href="@{'/tweet/' + ${tweet.id} + '/edit'}">編集</a>
+                        </li>
+                        <li>
+                            <form th:action="@{'/tweet/' + ${tweet.id} + '/delete'}" method="post">
+                                <input type="submit" value="削除" />
+                            </form>
+                        </li>
+                    </th:block>
+                </ul>
+            </div>
+            <p th:text="*{text}"></p>
+            <span class="name">
+                <a th:href="@{`/user/` + ${user.id}}" th:inline="text">
+                    <span>投稿者</span><span th:text="${tweet.user.username}">tech太郎</span>
+                </a>
+            </span>
+        </div>
+        <div th:if="${login_user != null}" class = "container">
+            	コメントする
+            	<form method="post" th:action = "@{'/tweet/' + ${tweet.id} + '/comment'}" th:object = "${commentForm}">
+            		<textarea cols = "30" name = "text" placeholder = "コメント" rows = "2"></textarea> 
+            		<input type = "submit" value = "SEND" />
+            	</form>
+            	<div class = "comments">
+            		<h4>＜みんなのコメント＞</h4>
+            		<p th:if = "tweet.comments != null" th:each = "comment : ${tweet.comments}" th:inline = "text">
+            			<strong><span th:text = "${comment.user.username}">投稿者</span></strong>
+            			<span th:text = "${comment.text}">米</span>
+            		</p>
+            	</div>
+         </div>
+    </div>
+    <footer>
+        <p>Copyright PicTweet 2017.</p>
+    </footer>
+</body>
+</html>

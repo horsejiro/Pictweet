@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Implementation-Title: pictweet2
+Implementation-Version: 0.0.1-SNAPSHOT
+Built-By: taimeshi07
+Implementation-Vendor-Id: com.pictweet2
+Build-Jdk: 1.8.0_172
+Implementation-URL: http://projects.spring.io/spring-boot/Pictweet2/
+Created-By: Maven Integration for Eclipse
+Implementation-Vendor: Pivotal Software, Inc.
+

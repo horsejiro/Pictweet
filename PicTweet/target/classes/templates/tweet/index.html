@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+<link rel="stylesheet" href="/css/setting.css" />
+<link rel="stylesheet" href="/css/style.css" />
+<title>Index Page</title>
+</head>
+<body>
+	<header class="header">
+	    <div class="header__bar row">
+	        <h1 class="grid-6">
+	            <a href="/">PicTweet</a>
+	        </h1>
+	        <div class="grid-6 user_nav">
+	            <th:block th:if="${login_user != null}">
+	                <a class="post" href="/tweet/new">投稿する</a>
+	                <form th:action="@{/user/logout}" method="post">
+	                    <input type="submit" value="ログアウト" />
+	                </form>
+	            </th:block>
+	            <th:block th:if="${login_user == null}">
+	                <a class="post" href="/user/login">ログイン</a>
+	                <a class="post" href="/user/registration">登録</a>
+	            </th:block>
+	        </div>
+	    </div>
+	</header>
+     <div class="contents row" th:each="tweet : ${tweets}">
+        <div class="content__post"
+            th:style="'background-image: url(' + @{${tweet.image}} + ');'">
+            <div class="more">
+                <span>■</span>
+                <ul class="more_list">
+                   <!-- この１つのliタグを追加 -->
+                    <li>
+                      <a th:href="@{'/tweet/' + ${tweet.id}}">詳細</a>
+                    </li>
+                    <th:block
+                        th:if="${login_user != null} ? ${tweet.user.id.equals(login_user.id)}">
+                        <li><a
+                            th:href="@{'/tweet/' + ${tweet.id} + '/edit'}">編集</a></li>
+                        <li>
+                            <form
+                                th:action="@{'/tweet/' + ${tweet.id} + '/delete'}"
+                                method="post">
+                                <input type="submit" value="削除" />
+                            </form>
+                        </li>
+                    </th:block>
+                </ul>
+            </div>
+            <p th:text="${tweet.text}"></p>
+            <span class="name" th:text="${tweet.user.username}"></span>
+        </div>
+    </div>
+    <div class="contents row">
+        <ul class="pagination" style="text-align: center;">
+            <li th:class="${tweets.isFirst()} ? disabled"><a th:href="@{/(page=0)}">&laquo;</a></li>
+            <li th:class="${!tweets.hasPrevious()} ? disabled"><a th:href="@{/(page=${tweets.getNumber() - 1})}">&larr;</a></li>
+            <li th:each="pageNumber : ${#numbers.sequence(tweets.getNumber() - 5, tweets.getNumber() + 5)}" th:if="${(pageNumber ge 0) and (pageNumber lt tweets.getTotalPages())}" th:class="${tweets.getNumber() == pageNumber} ? 'active pointer-disabled'" >
+                <a th:href="@{/(page=${pageNumber})}" th:text="${pageNumber + 1}"></a>
+            </li>
+            <li th:class="${!tweets.hasNext()} ? disabled"><a th:href="@{/(page=${tweets.getNumber() + 1})}">&rarr;</a></li>
+            <li th:class="${tweets.isLast()} ? disabled"><a th:href="@{/(page=${tweets.getTotalPages() - 1})}">&raquo;</a></li>
+        </ul>
+    </div>
+    <footer>
+        <p>Copyright PicTweet 2017.</p>
+    </footer>
+</body>
+</html>

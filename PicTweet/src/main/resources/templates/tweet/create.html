@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+<link rel="stylesheet" href="/css/setting.css" />
+<link rel="stylesheet" href="/css/style.css" />
+<title>New Tweet Page</title>
+</head>
+<body>
+    <header class="header">
+    <div class="header__bar row">
+        <h1 class="grid-6">
+            <a href="/">PicTweet</a>
+        </h1>
+        <div class="grid-6 user_nav">
+        <th:block th:if="${login_user != null}">
+            <a class="post" href="/tweet/new">投稿する</a>
+            <form th:action="@{/user/logout}" method="post">
+                <input type="submit" value="ログアウト" />
+            </form>
+        </th:block>
+        <th:block th:if="${login_user == null}">
+            <a class="post" href="/user/login">ログイン</a>
+            <a class="post" href="/user/registration">登録</a>
+        </th:block>   
+        </div>
+    </div>
+</header>
+    <div class="contents row">
+        <div class="success">
+            <h3>投稿が完了しました。</h3>
+            <a class="btn" href="/">投稿一覧へ戻る</a>
+        </div>
+    </div>
+    <footer>
+        <p>Copyright PicTweet 2017.</p>
+    </footer>
+</body>
+</html>

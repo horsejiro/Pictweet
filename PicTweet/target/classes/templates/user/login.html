@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+<title>User Login Page.</title>
+
+<link rel="stylesheet" href="/css/settings.css" />
+<link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <header class="header">
+    <div class="header__bar row">
+      <h1 class="grid-6">
+        <a href="/">PicTweet</a>
+      </h1>
+      <div class="grid-6 user_nav">
+      <th:block th:if="${login_user != null}">
+        <a class="post" href="/tweet/new">投稿する</a>
+        <form th:action="@{/user/logout}" method="post">
+        <input type="submit" value="ログアウト" />
+      </form>
+      </th:block>
+       <th:block th:if="${login_user == null}">
+      <a class="post" href="/user/login">ログイン</a>
+      <a class="post" href="/user/registration">登録</a>
+      </th:block>
+      </div>
+    </div>
+  </header>
+
+  <div class="contents row">
+    <h2>Sign in</h2>
+    <form th:action="@{/user/login}" method="post" th:object="${user}" class="new_user">
+      <div class="field">
+        <label for="user_nickname">Email</label>
+        <input id="user_nickname" type="text" placeholder="email" name="email" th:value="*{email}" />
+      </div>
+      <div class="field">
+        <label for="user_password">Password</label>
+        <input id="user_password" type="password" placeholder="password" name="password" th:value="*{password}" />
+      </div>
+      <div class="actions">
+        <input type="submit" value="Sign in" />
+      </div>
+    </form>
+  </div>
+</body>
+</html>
